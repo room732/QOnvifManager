@@ -31,11 +31,13 @@ Service::sendMessage(Message* message, const QString& namespaceKey) {
     qDebug() << "REQQQQQQQ: " << message->toXmlStr(); // todolog
     QString result = mClient->sendData(message->toXmlStr());
     qDebug() << "RESSSSSSS: " << result;
-    auto resFile = new QFile("log.txt");
+#ifdef QT_DEBUG
+    auto resFile = new QFile("wsdl_response_log.txt");
     qInfo() << resFile->open(QIODevice::WriteOnly);
     qInfo() << resFile->write(result.toStdString().c_str());
     resFile->close();
     delete resFile;
+#endif
     if (result == "") {
         return NULL;
     }
