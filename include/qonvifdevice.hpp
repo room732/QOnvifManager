@@ -1,4 +1,4 @@
-#ifndef QONVIFDEVICE_HPP
+﻿#ifndef QONVIFDEVICE_HPP
 #define QONVIFDEVICE_HPP
 
 #include "datastruct.hpp"
@@ -73,6 +73,7 @@ public:
 
     // ptz management
     bool refreshPtzConfiguration();
+    bool loadDefaultPtzConfiguration();
     bool refreshPresets();
     bool goHomePosition();
     bool setHomePosition();

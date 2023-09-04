@@ -1,4 +1,4 @@
-#include "qonvifdevice.hpp"
+﻿#include "qonvifdevice.hpp"
 #include "devicemanagement.h"
 #include "mediamanagement.h"
 #include "ptzmanagement.h"
@@ -884,6 +884,40 @@ public:
             config->defaultContinuousPanTiltVelocitySpace();
 
         delete config;
+
+        return true;
+    }
+    bool loadDefaultPtzConfiguration() {
+        auto cfgs = iptzManagement->getConfigurations();
+        auto& des = idata.ptz.config;
+
+        if (cfgs->getName                                     ().size()) des.name                                    = cfgs->getName                                     ().front();
+        if (cfgs->getUseCount                                 ().size()) des.useCount                                = cfgs->getUseCount                                 ().front();
+        if (cfgs->getNodeToken                                ().size()) des.nodeToken                               = cfgs->getNodeToken                                ().front();
+        if (cfgs->getPanTiltX                                 ().size()) des.panTiltX                                = cfgs->getPanTiltX                                 ().front();
+        if (cfgs->getPanTiltY                                 ().size()) des.panTiltY                                = cfgs->getPanTiltY                                 ().front();
+        if (cfgs->getZoomSpace                                ().size()) des.zoomSpace                               = cfgs->getZoomSpace                                ().front();
+        if (cfgs->getDefaultPTZTimeout                        ().size()) des.defaultPTZTimeout                       = cfgs->getDefaultPTZTimeout                        ().front();
+        if (cfgs->getPanTiltSpace                             ().size()) des.panTiltUri                              = cfgs->getPanTiltSpace                             ().front();
+        if (cfgs->getPanTiltXRangeMin                         ().size()) des.panTiltXRangeMin                        = cfgs->getPanTiltXRangeMin                         ().front();
+        if (cfgs->getPanTiltXRangeMax                         ().size()) des.panTiltXRangeMax                        = cfgs->getPanTiltXRangeMax                         ().front();
+        if (cfgs->getPanTiltXRangeMin                         ().size()) des.panTiltYRangeMin                        = cfgs->getPanTiltXRangeMin                         ().front();
+        if (cfgs->getPanTiltYRangeMax                         ().size()) des.panTiltYRangeMax                        = cfgs->getPanTiltYRangeMax                         ().front();
+        if (cfgs->getZoomSpace                                ().size()) des.zoomUri                                 = cfgs->getZoomSpace                                ().front();
+        if (cfgs->getZoomXRangeMin                            ().size()) des.zoomXRangeMin                           = cfgs->getZoomXRangeMin                            ().front();
+        if (cfgs->getZoomXRangeMax                            ().size()) des.zoomXRangeMax                           = cfgs->getZoomXRangeMax                            ().front();
+        if (cfgs->getToken                                    ().size()) des.ptzConfigurationToken                   = cfgs->getToken                                    ().front();
+        if (cfgs->getPanTiltSpace                             ().size()) des.panTiltSpace                            = cfgs->getPanTiltSpace                             ().front();
+        if (cfgs->getZoomX                                    ().size()) des.zoomX                                   = cfgs->getZoomX                                    ().front();
+
+        if (cfgs->getDefaultAbsolutePantTiltPositionSpace     ().size()) des.defaultAbsolutePantTiltPositionSpace    = cfgs->getDefaultAbsolutePantTiltPositionSpace     ().front();
+        if (cfgs->getDefaultAbsoluteZoomPositionSpace         ().size()) des.defaultAbsoluteZoomPositionSpace        = cfgs->getDefaultAbsoluteZoomPositionSpace         ().front();
+        if (cfgs->getDefaultRelativePanTiltTranslationSpace   ().size()) des.defaultRelativePanTiltTranslationSpace  = cfgs->getDefaultRelativePanTiltTranslationSpace   ().front();
+        if (cfgs->getDefaultRelativeZoomTranslationSpace      ().size()) des.defaultRelativeZoomTranslationSpace     = cfgs->getDefaultRelativeZoomTranslationSpace      ().front();
+        if (cfgs->getDefaultContinuousPanTiltVelocitySpace    ().size()) des.defaultContinuousPanTiltVelocitySpace   = cfgs->getDefaultContinuousPanTiltVelocitySpace    ().front();
+
+        delete cfgs;
+
         return true;
     }
     bool refreshImageSetting() {
@@ -933,28 +967,28 @@ public:
     // ptz //todo remove profile tokens hardcode
     bool refreshPresets() {
         ONVIF::Presets* presets = new ONVIF::Presets;
-        presets->setProfileToken("MediaProfile000");
+        presets->setProfileToken(idata.ptz.config.ptzConfigurationToken);
         iptzManagement->getPresets(presets);
         delete presets;
         return true;
     }
     bool goHomePosition() {
         ONVIF::GotoHomePosition* goHomePose = new ONVIF::GotoHomePosition;
-        goHomePose->setProfileToken("MediaProfile000");
+        goHomePose->setProfileToken(idata.ptz.config.ptzConfigurationToken);
         iptzManagement->gotoHomePosition(goHomePose);
         delete goHomePose;
         return true;
     }
     bool setHomePosition() {
         ONVIF::HomePosition* homePosition = new ONVIF::HomePosition;
-        homePosition->setProfileToken("MediaProfile000");
+        homePosition->setProfileToken(idata.ptz.config.ptzConfigurationToken);
         iptzManagement->setHomePosition(homePosition);
         delete homePosition;
         return true;
     }
     bool continuousMove(const float x, const float y, const float z) {
         ONVIF::ContinuousMove* continuousMove = new ONVIF::ContinuousMove;
-        continuousMove->setProfileToken("MediaProfile000");
+        continuousMove->setProfileToken(idata.ptz.config.ptzConfigurationToken);
         continuousMove->setPanTiltX(x);
         continuousMove->setPanTiltY(y);
         continuousMove->setZoomX(z);
@@ -964,7 +998,7 @@ public:
     }
     bool stopMovement() {
         ONVIF::Stop* stop = new ONVIF::Stop;
-        stop->setProfileToken("MediaProfile000");
+        stop->setProfileToken(idata.ptz.config.ptzConfigurationToken);
         stop->setPanTilt(true);
         stop->setZoom(true);
         iptzManagement->stop(stop);
@@ -1161,6 +1195,11 @@ QOnvifDevice::refreshUsers() {
 bool
 QOnvifDevice::refreshPtzConfiguration() {
     return d_ptr->refreshPtzConfiguration();
+}
+
+bool
+QOnvifDevice::loadDefaultPtzConfiguration() {
+    return d_ptr->loadDefaultPtzConfiguration();
 }
 
 bool

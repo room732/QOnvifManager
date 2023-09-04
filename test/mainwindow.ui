@@ -76,7 +76,7 @@
       <item>
        <widget class="QLineEdit" name="txtPassword">
         <property name="text">
-         <string>admin</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -424,8 +424,110 @@
     <string>About</string>
    </property>
   </action>
+  <action name="actionStopMovement">
+   <property name="text">
+    <string>StopMovement</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>btnDown</sender>
+   <signal>released()</signal>
+   <receiver>actionStopMovement</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>366</x>
+     <y>497</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnLeft</sender>
+   <signal>released()</signal>
+   <receiver>actionStopMovement</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>285</x>
+     <y>460</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnRight</sender>
+   <signal>released()</signal>
+   <receiver>actionStopMovement</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>447</x>
+     <y>460</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnUp</sender>
+   <signal>released()</signal>
+   <receiver>actionStopMovement</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>366</x>
+     <y>423</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnzoomIn</sender>
+   <signal>released()</signal>
+   <receiver>actionStopMovement</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>285</x>
+     <y>497</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnzoomOut</sender>
+   <signal>released()</signal>
+   <receiver>actionStopMovement</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>447</x>
+     <y>497</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>366</x>
+     <y>497</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

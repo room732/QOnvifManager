@@ -1,4 +1,4 @@
-#include <QDebug>
+﻿#include <QDebug>
 #include <QMessageBox>
 
 #include "mainwindow.hpp"
@@ -9,7 +9,7 @@
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
-    ionvifManager = new QOnvifManager("admin", "admin", this);
+    ionvifManager = new QOnvifManager("admin", "", this);
     connect(
         ionvifManager,
         &QOnvifManager::newDeviceFinded,
@@ -30,6 +30,8 @@ MainWindow::onNewDeviceFinded(QOnvifDevice* _device) {
             .probeData.deviceServiceAddress.replace("http://", "")
             .replace("/onvif/device_service", ""),
         _device->data().probeData.endPointAddress);
+
+    _device->loadDefaultPtzConfiguration();
 }
 
 void
@@ -55,36 +57,36 @@ void
 MainWindow::on_btnRefreshData_clicked() {
     ui->txtLocation->setText("");
     ui->txtName->setText("");
-    //    ionvifManager->refreshDeviceCapabilities(currentDevice());
-    //    ionvifManager->refreshDeviceInformations(currentDevice());
-        ionvifManager->refreshDeviceProfiles(currentDevice());
-        ionvifManager->refreshDeviceImageSetting(currentDevice());
-        ionvifManager->refreshDeviceImageSettingOptions(currentDevice());
-//        ionvifManager->refreshDeviceVideoConfigs(currentDevice());
-//        ionvifManager->refreshDeviceVideoConfigsOptions(currentDevice());
-    //    ionvifManager->refreshDeviceStreamUris(currentDevice());
+    ionvifManager->refreshDeviceCapabilities(currentDevice());
+    ionvifManager->refreshDeviceInformations(currentDevice());
+    ionvifManager->refreshDeviceProfiles(currentDevice());
+    ionvifManager->refreshDeviceImageSetting(currentDevice());
+    ionvifManager->refreshDeviceImageSettingOptions(currentDevice());
+    ionvifManager->refreshDeviceVideoConfigs(currentDevice());
+    ionvifManager->refreshDeviceVideoConfigsOptions(currentDevice());
+    ionvifManager->refreshDeviceStreamUris(currentDevice());
 
-    //    ionvifManager->refreshDeviceUsers(currentDevice());
-    //    ionvifManager->refreshDeviceScopes(currentDevice());
-//    ionvifManager->refreshDeviceInterfaces(currentDevice());
-//    ionvifManager->refreshDeviceDNS(currentDevice());
-//    ionvifManager->refreshDeviceDefaultGateway(currentDevice());
-//    ionvifManager->refreshDeviceDiscoveryMode(currentDevice());
-//    ionvifManager->refreshDeviceHostname(currentDevice());
-//    ionvifManager->refreshDeviceNTP(currentDevice());
-    //    ionvifManager->refreshDevicePtzConfigs(currentDevice());
+    ionvifManager->refreshDeviceUsers(currentDevice());
+    ionvifManager->refreshDeviceScopes(currentDevice());
+    ionvifManager->refreshDeviceInterfaces(currentDevice());
+    ionvifManager->refreshDeviceDNS(currentDevice());
+    ionvifManager->refreshDeviceDefaultGateway(currentDevice());
+    ionvifManager->refreshDeviceDiscoveryMode(currentDevice());
+    ionvifManager->refreshDeviceHostname(currentDevice());
+    ionvifManager->refreshDeviceNTP(currentDevice());
+    ionvifManager->refreshDevicePtzConfigs(currentDevice());
 
     // setScopes
-    //    ui->txtLocation->setText(
-    //        ionvifManager->device(currentDevice())->data().scopes.location);
-    //    ui->txtName->setText(
-    //        ionvifManager->device(currentDevice())->data().scopes.name);
-    //    ui->txtHardware->setText(
-    //        ionvifManager->device(currentDevice())->data().scopes.hardware);
+    ui->txtLocation->setText(
+        ionvifManager->device(currentDevice())->data().scopes.location);
+    ui->txtName->setText(
+        ionvifManager->device(currentDevice())->data().scopes.name);
+    ui->txtHardware->setText(
+        ionvifManager->device(currentDevice())->data().scopes.hardware);
 
-    //    on_btnGetDataAndTime_clicked();
+    on_btnGetDataAndTime_clicked();
 
-    QOnvifDevice* device = ionvifManager->device(currentDevice());
+    auto device = ionvifManager->device(currentDevice());
     Q_UNUSED(device)
 
     // <- add a breake point here to see device informations in debuger.
@@ -154,7 +156,32 @@ MainWindow::on_btnRight_pressed() {
     ionvifManager->device(currentDevice())->continuousMove(0.5, 0, 0);
 }
 
-void
-MainWindow::on_btnRight_released() {
+void MainWindow::on_btnLeft_pressed() {
+    ionvifManager->device(currentDevice())->continuousMove(-0.5, 0, 0);
+}
+
+
+void MainWindow::on_actionStopMovement_triggered() {
     ionvifManager->device(currentDevice())->stopMovement();
 }
+
+
+void MainWindow::on_btnUp_pressed() {
+    ionvifManager->device(currentDevice())->continuousMove(0, 0.5, 0);
+}
+
+
+void MainWindow::on_btnDown_pressed() {
+    ionvifManager->device(currentDevice())->continuousMove(0, -0.5, 0);
+}
+
+
+void MainWindow::on_btnzoomIn_pressed() {
+    ionvifManager->device(currentDevice())->continuousMove(0, 0, 0.5);
+}
+
+
+void MainWindow::on_btnzoomOut_pressed() {
+    ionvifManager->device(currentDevice())->continuousMove(0, 0, -0.5);
+}
+

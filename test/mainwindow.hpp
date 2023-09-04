@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_HPP
+﻿#ifndef MAINWINDOW_HPP
 #define MAINWINDOW_HPP
 
 #include <QMainWindow>
@@ -37,8 +37,12 @@ private slots:
     void on_btnsetHome_clicked();
     void on_btnrefreshPresents_clicked();
     void on_btnRight_pressed();
-    void on_btnRight_released();
-
+    void on_btnLeft_pressed();
+    void on_actionStopMovement_triggered();
+    void on_btnUp_pressed();
+    void on_btnDown_pressed();
+    void on_btnzoomIn_pressed();
+    void on_btnzoomOut_pressed();
 
 private:
     Ui::MainWindow *ui;

@@ -8,9 +8,11 @@ QT       += core gui network xml xmlpatterns
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+CONFIG += c++14
+
 QMAKE_RPATHDIR += .
 
-DESTDIR  = ../../../bin
+DESTDIR  = ../bin
 TARGET = QOnvifManagerTester
 TEMPLATE = app
 
@@ -21,9 +23,7 @@ HEADERS  += mainwindow.hpp
 
 FORMS    += mainwindow.ui
 
-
-
-LIBS += -L$$PWD/../../../bin/ -lQOnvifManager
+LIBS += -L$$PWD/../bin/ -lQOnvifManager
 
 INCLUDEPATH += $$PWD/../include
 DEPENDPATH += $$PWD/../include
@@ -63,7 +63,7 @@ win32 {
     }
     *-g++*{
         # mingw or msys
-        CONFIG         -= debug debug_and_release
+        ##CONFIG         -= debug debug_and_release
         QMAKE_CXXFLAGS *= -Wall -Wextra -Wnon-virtual-dtor -pedantic
         QMAKE_CXXFLAGS *= -Wcast-align -Wunused -Woverloaded-virtual
         QMAKE_CXXFLAGS *= -Wno-unused-parameter
