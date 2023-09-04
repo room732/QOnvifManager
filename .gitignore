@@ -78,3 +78,5 @@ xbin/
 *.dll
 *.exe
 
+#---------
+.qtc_clangd
