@@ -5,6 +5,16 @@
 
 using namespace device;
 
+class OnvifDeviceMap : public QMap<QString, std::shared_ptr<QOnvifDevice>>
+{
+public:
+    using QMap::QMap;
+
+    QMap::mapped_type value(const QMap::key_type& key) {
+        return QMap::value(key, std::make_shared<QOnvifDevice>("", "", "", nullptr));
+    }
+};
+
 class QOnvifManagerPrivate
 {
 public:
@@ -15,7 +25,7 @@ public:
     QScopedPointer<QOnvifManagerPrivate> d_ptr;
     QString                              iuserName;
     QString                              ipassword;
-    QMap<QString, QOnvifDevice*> idevicesMap;
+    OnvifDeviceMap idevicesMap;
     QHostAddress           ihostAddress;
     ONVIF::DeviceSearcher* ideviceSearcher;
 };
@@ -48,7 +58,7 @@ QOnvifManager::~QOnvifManager() {}
 bool
 QOnvifManager::refreshDevicesList() {
     Q_D(QOnvifManager);
-    qDeleteAll(d->idevicesMap);
+//    qDeleteAll(d->idevicesMap);
     d->idevicesMap.clear();
     d->ideviceSearcher->sendSearchMsg();
     return true;
@@ -59,7 +69,7 @@ QOnvifManager::refreshDeviceCapabilities(QString _deviceEndPointAddress) {
     if (!cameraExist(_deviceEndPointAddress))
         return false;
     return d_ptr->idevicesMap.value(_deviceEndPointAddress)
-        ->refreshDeviceCapabilities();
+            ->refreshDeviceCapabilities();
 }
 
 bool
@@ -197,12 +207,12 @@ QOnvifManager::setDeviceImageSetting(
         ->setDeviceImageSetting(_imageSetting);
 }
 
-QOnvifDevice*
+std::shared_ptr<QOnvifDevice>
 QOnvifManager::device(QString _deviceEndPointAddress) {
     return d_ptr->idevicesMap.value(_deviceEndPointAddress);
 }
 
-QMap<QString, QOnvifDevice*>&
+QMap<QString, std::shared_ptr<QOnvifDevice>>&
 QOnvifManager::devicesMap() {
     return d_ptr->idevicesMap;
 }
@@ -353,9 +363,9 @@ QOnvifManager::onReciveData(QHash<QString, QString> _deviceHash) {
         _deviceHash.value("device_service_address");
     probeData.scopes          = _deviceHash.value("scopes");
     probeData.metadataVersion = _deviceHash.value("metadata_version");
-    QOnvifDevice* device      = new QOnvifDevice(
+    auto device      = std::make_shared<device::QOnvifDevice>(
         probeData.deviceServiceAddress, d->iuserName, d->ipassword, this);
     device->setDeviceProbeData(probeData);
     d->idevicesMap.insert(probeData.endPointAddress, device);
-    emit newDeviceFinded(device);
+    emit newDeviceFinded(device.get());
 }

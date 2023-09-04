@@ -84,7 +84,7 @@ MainWindow::on_btnRefreshData_clicked() {
 
     //    on_btnGetDataAndTime_clicked();
 
-    QOnvifDevice* device = ionvifManager->device(currentDevice());
+    auto device = ionvifManager->device(currentDevice());
     Q_UNUSED(device)
 
     // <- add a breake point here to see device informations in debuger.

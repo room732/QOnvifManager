@@ -1,6 +1,8 @@
 #ifndef QONVIFMANAGER_HPP
 #define QONVIFMANAGER_HPP
 
+#include <memory>
+
 #include "qonvifdevice.hpp"
 #include <QDateTime>
 #include <QHostAddress>
@@ -19,7 +21,6 @@
 //#endif
 
 //#endif
-
 
 namespace ONVIF {
 class DeviceSearcher;
@@ -122,8 +123,8 @@ public:
     bool stopMovement(QString _deviceEndPointAddress);
 
     // public
-    device::QOnvifDevice* device(QString _deviceEndPointAddress);
-    QMap<QString, device::QOnvifDevice*>& devicesMap();
+    std::shared_ptr<device::QOnvifDevice> device(QString _deviceEndPointAddress);
+    QMap<QString, std::shared_ptr<device::QOnvifDevice>>& devicesMap();
 
 
 protected:

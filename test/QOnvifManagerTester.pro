@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 QMAKE_RPATHDIR += .
 
-DESTDIR  = ../../../bin
+DESTDIR  = ../bin
 TARGET = QOnvifManagerTester
 TEMPLATE = app
 
@@ -21,9 +21,7 @@ HEADERS  += mainwindow.hpp
 
 FORMS    += mainwindow.ui
 
-
-
-LIBS += -L$$PWD/../../../bin/ -lQOnvifManager
+LIBS += -L$$PWD/../bin/ -lQOnvifManager
 
 INCLUDEPATH += $$PWD/../include
 DEPENDPATH += $$PWD/../include
