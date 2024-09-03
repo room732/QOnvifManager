@@ -53,9 +53,11 @@ DeviceSearcher::DeviceSearcher(QHostAddress &addr, QObject *parent) : QObject(pa
     mUdpSocket = new QUdpSocket(this);
     //QHostAddress host("192.168.0.1");
     //mUdpSocket->bind(QHostAddress::Any, 0, QUdpSocket::ShareAddress);
-    mUdpSocket->bind(addr, 0, QUdpSocket::ShareAddress);
-    int opt=4 * 1024 * 1024;
+    if (!mUdpSocket->bind(addr, 0, QUdpSocket::ShareAddress)) {
+        qWarning() << "!mUdpSocket->bind error";
+    }
 
+//    int opt=4 * 1024 * 1024;
 //    if (setsockopt(mUdpSocket->socketDescriptor(), SOL_SOCKET,
 //                   SO_RCVBUF, (char *)&opt, sizeof(int)) < 0) {
 //        printf("Set ----> SO_RCVBUF error\n");
@@ -77,9 +79,12 @@ DeviceSearcher::~DeviceSearcher()
 
 void DeviceSearcher::sendSearchMsg()
 {
+    qDebug() << "sendSearchMsg";
     Message *msg = Message::getOnvifSearchMessage();
     QString msg_str = msg->toXmlStr();
-    mUdpSocket->writeDatagram(msg_str.toUtf8(), QHostAddress("239.255.255.250"), 3702);
+    if (1 > mUdpSocket->writeDatagram(msg_str.toUtf8(), QHostAddress("239.255.255.250"), 3702)) {
+        qWarning() << "writeDatagram err";
+    }
     delete msg;
 }
 
@@ -92,6 +97,8 @@ void DeviceSearcher::readPendingDatagrams()
         quint16 senderPort;
         mUdpSocket->readDatagram(datagram.data(), datagram.size(),
                                  &sender, &senderPort);
+
+        qWarning() << "datagram" << datagram.size() << "from" << sender;
 
 //        qDebug() << "========> \n" << datagram << "\n++++++++++++++++++++++++\n";
 
