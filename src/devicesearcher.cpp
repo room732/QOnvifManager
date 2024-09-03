@@ -53,9 +53,11 @@ DeviceSearcher::DeviceSearcher(QHostAddress &addr, QObject *parent) : QObject(pa
     mUdpSocket = new QUdpSocket(this);
     //QHostAddress host("192.168.0.1");
     //mUdpSocket->bind(QHostAddress::Any, 0, QUdpSocket::ShareAddress);
+    qWarning() << "try bind" << addr;
     if (!mUdpSocket->bind(addr, 0, QUdpSocket::ShareAddress)) {
         qWarning() << "!mUdpSocket->bind error";
     }
+    qWarning() << "bind ok";
 
 //    int opt=4 * 1024 * 1024;
 //    if (setsockopt(mUdpSocket->socketDescriptor(), SOL_SOCKET,
@@ -79,7 +81,7 @@ DeviceSearcher::~DeviceSearcher()
 
 void DeviceSearcher::sendSearchMsg()
 {
-    qDebug() << "sendSearchMsg";
+    qWarning() << "sendSearchMsg";
     Message *msg = Message::getOnvifSearchMessage();
     QString msg_str = msg->toXmlStr();
     if (1 > mUdpSocket->writeDatagram(msg_str.toUtf8(), QHostAddress("239.255.255.250"), 3702)) {
@@ -90,6 +92,7 @@ void DeviceSearcher::sendSearchMsg()
 
 void DeviceSearcher::readPendingDatagrams()
 {
+    qWarning() << "readPendingDatagrams";
     do {
         QByteArray datagram;
         datagram.resize(mUdpSocket->pendingDatagramSize());
